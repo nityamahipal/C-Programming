@@ -1,0 +1,115 @@
+#include<stdio.h>
+struct student
+{
+    int rollno;
+    char name[30];
+    float mark1;
+    float mark2;
+    float mark3;
+    float mark4;
+    float mark5;
+    float mark6;
+    float mark7;
+    float mark8;
+    float mark9;
+    float mark10;
+}stud;
+
+void insert()
+{
+    FILE *fp;
+    fp = fopen("Record", "a");
+    printf("Enter the Roll no   :");
+    scanf("%d", &stud.rollno);
+    printf("Enter the Name      :");
+    scanf("%s", &stud.name);
+    printf("Enter the marks of subject 1      :");
+    scanf("%f", &stud.mark1);
+    printf("Enter the marks of subject 2      :");
+    scanf("%f", &stud.mark2);
+    printf("Enter the marks of subject 3      :");
+    scanf("%f", &stud.mark3);
+    printf("Enter the marks of subject 4      :");
+    scanf("%f", &stud.mark4);
+    printf("Enter the marks of subject 5      :");
+    scanf("%f", &stud.mark5);
+    printf("Enter the marks of subject 6      :");
+    scanf("%f", &stud.mark6);
+    printf("Enter the marks of subject 7      :");
+    scanf("%f", &stud.mark7);
+    printf("Enter the marks of subject 8      :");
+    scanf("%f", &stud.mark8);
+    printf("Enter the marks of subject 9      :");
+    scanf("%f", &stud.mark9);
+    printf("Enter the marks of subject 10     :");
+    scanf("%f", &stud.mark10);
+    fwrite(&stud, sizeof(stud), 1, fp);
+    fclose(fp);
+}
+
+//    FUNCTION TO DISPLAY RECORDS
+void disp()
+{
+    FILE *fp1;
+    fp1 = fopen("Record", "r");
+    printf("\nRoll Number\tName\tMark1\tMark2\tMark3\tMark4\tMark5\tMark6\tMark7\tMark8\tMark9\tMark10\n\n");
+    while (fread(&stud, sizeof(stud), 1, fp1))
+    printf("  %d\t\t%s\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t%.2f\n",
+    stud.rollno, stud.name, stud.mark1, stud.mark2, stud.mark3, stud.mark4, stud.mark5, stud.mark6, stud.mark7, stud.mark8, stud.mark9, stud.mark10);
+    fclose(fp1);
+}
+
+//    FUNCTION TO DELETE A RECORD
+void deletefile()
+{
+    FILE *fpo;
+    FILE *fpt;
+    int r, s;
+    printf("Enter the Roll no you want to delete :");
+    scanf("%d", &r);
+    fpo = fopen("Record", "r");
+    fpt = fopen("TempFile", "w");
+    while (fread(&stud, sizeof(stud), 1, fpo))
+    {
+        s = stud.rollno;
+        if (s != r)
+        fwrite(&stud, sizeof(stud), 1, fpt);
+    }
+    fclose(fpo);
+    fclose(fpt);
+    fpo = fopen("Record", "w");
+    fpt = fopen("TempFile", "r");
+    while (fread(&stud, sizeof(stud), 1, fpt))
+    fwrite(&stud, sizeof(stud), 1, fpo);
+    printf("\nRECORD DELETED\n");
+    fclose(fpo);
+    fclose(fpt);
+}
+
+// MAIN PROGRAM
+void main()
+{
+    int c;
+    do
+    {
+        printf("\n--------------Select your choice---------\n");
+        printf("\n\t1. INSERT\n\t2. DISPLAY\n\t3. DELETE\n\t4. EXIT");
+        printf("\n\n------------------------------------------\n");
+        printf("\nEnter your choice:");
+        scanf("%d", &c);
+        printf("\n");
+        switch (c)
+        {
+            case 1:insert();
+            break;
+            case 2:disp();
+            break;
+            case 3:deletefile();
+            break;
+            case 4:exit(1);
+            break;
+            default:printf("\nYour choice is wrong\nPlease try again...\n");
+            break;
+        }
+    }while (c != 4);
+}
